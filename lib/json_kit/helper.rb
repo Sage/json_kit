@@ -29,10 +29,14 @@ module JsonKit
 
       if obj.is_a?(Array)
         return obj.map do |i|
-          if klass != nil
-            @hash_helper.from_hash(i, klass, transforms)
-          else
+          if i.is_a?(Hash)
+            if klass != nil
+              @hash_helper.from_hash(i, klass, transforms)
+            else i.is_a?(Hash)
             @hash_helper.symbolize(i)
+            end
+          else
+            i
           end
         end
       else

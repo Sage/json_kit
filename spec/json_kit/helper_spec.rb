@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe JsonKit::Helper do
+
+  let(:hash_with_arrays) do
+    { array1: [hash,hash], array2: [1,2,3,4] }
+  end
+
   describe '#to_json' do
 
     let(:hash) do
@@ -26,6 +31,13 @@ RSpec.describe JsonKit::Helper do
       it 'should create a json string' do
         json = subject.to_json(hash)
         expect(json).to eq('{"key1":"value1"}')
+      end
+
+      context 'with nested arrays' do
+        it 'should create a json string' do
+          json = subject.to_json(hash_with_arrays)
+          expect(json).to eq('{"array1":[{"key1":"value1"},{"key1":"value1"}],"array2":[1,2,3,4]}')
+        end
       end
     end
 
@@ -71,6 +83,10 @@ RSpec.describe JsonKit::Helper do
       return '[{"text":"abc","numeric":5},{"text":"def","numeric":6}]'
     end
 
+    let(:json_hash_with_arrays) do
+      '{"array1":[{"key1":"value1"},{"key1":"value1"}],"array2":[1,2,3,4]}'
+    end
+
     context 'when no klass is specified' do
 
       it 'should return a hash form the json' do
@@ -83,6 +99,17 @@ RSpec.describe JsonKit::Helper do
         expect(array.length).to eq(2)
         expect(array[0]).to eq({ text: 'abc', numeric: 5 })
         expect(array[1]).to eq({ text: 'def', numeric: 6 })
+      end
+
+      it 'should return a hash with nested arrays from the json' do
+        hash = subject.from_json(json_hash_with_arrays)
+        expect(hash[:array1].length).to eq(2)
+        expect(hash[:array1][0][:key1]).to eq('value1')
+        expect(hash[:array2].length).to eq(4)
+        expect(hash[:array2][0]).to eq(1)
+        expect(hash[:array2][1]).to eq(2)
+        expect(hash[:array2][2]).to eq(3)
+        expect(hash[:array2][3]).to eq(4)
       end
 
     end
