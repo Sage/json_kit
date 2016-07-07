@@ -14,6 +14,14 @@ RSpec.describe JsonKit::Helper do
       end
     end
 
+    let(:hash_array) do
+      [hash,hash,hash]
+    end
+
+    let(:class_instance_array) do
+      [class_instance, class_instance, class_instance]
+    end
+
     context 'Hash' do
       it 'should create a json string' do
         json = subject.to_json(hash)
@@ -33,6 +41,22 @@ RSpec.describe JsonKit::Helper do
       it 'should create a json string' do
         json = subject.to_json(class_instance)
         expect(json).to eq('{"text":"abc","numeric":5}')
+      end
+    end
+
+    context 'Array' do
+      context 'of Hashes' do
+        it 'should create a json string' do
+          json = subject.to_json(hash_array)
+          expect(json).to eq('[{"key1":"value1"},{"key1":"value1"},{"key1":"value1"}]')
+        end
+      end
+
+      context 'of class instances' do
+        it 'should create a json string' do
+          json = subject.to_json(class_instance_array)
+          expect(json).to eq('[{"text":"abc","numeric":5},{"text":"abc","numeric":5},{"text":"abc","numeric":5}]')
+        end
       end
     end
 

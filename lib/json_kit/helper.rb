@@ -10,6 +10,9 @@ module JsonKit
         return obj
       elsif obj.is_a?(Hash)
         return JSON.dump(obj)
+      elsif obj.is_a?(Array)
+        array = convert_array(obj)
+        return JSON.dump(array)
       else
         hash = @hash_helper.to_hash(obj)
         return JSON.dump(hash)
@@ -41,6 +44,20 @@ module JsonKit
       end
 
     end
+
+      private
+
+      def convert_array(array)
+        array.map do |i|
+          if i.is_a?(Array)
+            convert_array(i)
+          elsif i.is_a?(Hash)
+            i
+          else
+            @hash_helper.to_hash(i)
+          end
+        end
+      end
 
   end
 end
