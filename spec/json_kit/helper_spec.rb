@@ -40,13 +40,25 @@ RSpec.describe JsonKit::Helper do
 
   describe '#from_json' do
     let(:json) do
-      '{"text":"abc","numeric":5}'
+      return '{"text":"abc","numeric":5}'
+    end
+
+    let(:json_array) do
+      return '[{"text":"abc","numeric":5},{"text":"def","numeric":6}]'
     end
 
     context 'when no klass is specified' do
 
       it 'should return a hash form the json' do
         expect(subject.from_json(json)).to eq({ text: 'abc', numeric: 5 })
+      end
+
+      it 'should return an array of hashes from the json' do
+        array = subject.from_json(json_array)
+        expect(array).to be_a(Array)
+        expect(array.length).to eq(2)
+        expect(array[0]).to eq({ text: 'abc', numeric: 5 })
+        expect(array[1]).to eq({ text: 'def', numeric: 6 })
       end
 
     end
@@ -57,6 +69,18 @@ RSpec.describe JsonKit::Helper do
         expect(obj).to be_a(TestEntity)
         expect(obj.text).to eq('abc')
         expect(obj.numeric).to eq(5)
+      end
+
+      it 'should return an array of instances populated from the json' do
+        array = subject.from_json(json_array, TestEntity)
+        expect(array).to be_a(Array)
+        expect(array.length).to eq(2)
+        expect(array[0]).to be_a(TestEntity)
+        expect(array[0].text).to eq('abc')
+        expect(array[0].numeric).to eq(5)
+        expect(array[1]).to be_a(TestEntity)
+        expect(array[1].text).to eq('def')
+        expect(array[1].numeric).to eq(6)
       end
     end
 

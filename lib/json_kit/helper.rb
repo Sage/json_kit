@@ -18,12 +18,26 @@ module JsonKit
 
     def from_json(json, klass = nil, transforms = [])
 
-      hash = JSON.load(json)
+      obj = JSON.parse(json)
 
-      if klass != nil
-        return @hash_helper.from_hash(hash, klass, transforms)
+      if [String, Fixnum, Numeric, Date, DateTime, Time, Integer].include?(obj.class)
+        return json
+      end
+
+      if obj.is_a?(Array)
+        return obj.map do |i|
+          if klass != nil
+            @hash_helper.from_hash(i, klass, transforms)
+          else
+            @hash_helper.symbolize(i)
+          end
+        end
       else
-        return @hash_helper.symbolize(hash)
+        if klass != nil
+          return @hash_helper.from_hash(obj, klass, transforms)
+        else
+          return @hash_helper.symbolize(obj)
+        end
       end
 
     end
