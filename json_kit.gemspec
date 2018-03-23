@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Toolkit for working with Json'
   spec.description   = 'Toolkit for working with Json'
-  spec.homepage      = "https://github.com/vaughanbrittonsage/json_kit"
+  spec.homepage      = "https://github.com/sage/json_kit"
   spec.license       = "MIT"
 
   spec.files         = Dir.glob("{bin,lib}/**/**/**")

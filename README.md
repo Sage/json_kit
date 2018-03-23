@@ -44,10 +44,12 @@ This method is called to convert a json string to an ruby object.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/vaughanbrittonsage/hash_kit. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/sage/hash_kit. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+This gem is available as open source under the terms of the
+[MIT licence](LICENSE).
 
+Copyright (c) 2018 Sage Group Plc. All rights reserved.
