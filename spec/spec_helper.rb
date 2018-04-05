@@ -1,3 +1,8 @@
+require 'simplecov'
+SimpleCov.start do
+    add_filter 'spec/'
+end
+
 require 'pry'
 require 'json_kit'
 require_relative 'json_kit/test_objects'
@@ -18,10 +23,6 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
 
   config.warnings = false
-
-  if config.files_to_run.one?
-    config.default_formatter = 'doc'
-  end
 
   config.profile_examples = 10
 
