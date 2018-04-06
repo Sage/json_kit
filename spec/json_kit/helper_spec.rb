@@ -1,13 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe JsonKit::Helper do
-
   let(:hash_with_arrays) do
     { array1: [hash,hash], array2: [1,2,3,4] }
   end
 
   describe '#to_json' do
-
     let(:hash) do
       { key1: 'value1' }
     end
@@ -17,6 +15,10 @@ RSpec.describe JsonKit::Helper do
         entity.text = 'abc'
         entity.numeric = 5
       end
+    end
+
+    let(:array_array_hash) do
+      [[hash, hash],[hash]]
     end
 
     let(:hash_array) do
@@ -57,6 +59,13 @@ RSpec.describe JsonKit::Helper do
     end
 
     context 'Array' do
+      context 'of Arrays of hashes' do
+        it 'should create a json string' do
+          json = subject.to_json(array_array_hash)
+          expect(json).to eq('[[{"key1":"value1"},{"key1":"value1"}],[{"key1":"value1"}]]')
+        end
+      end
+
       context 'of Hashes' do
         it 'should create a json string' do
           json = subject.to_json(hash_array)
@@ -71,24 +80,34 @@ RSpec.describe JsonKit::Helper do
         end
       end
     end
-
   end
 
   describe '#from_json' do
     let(:json) do
-      return '{"text":"abc","numeric":5}'
+      '{"text":"abc","numeric":5}'
     end
 
     let(:json_array) do
-      return '[{"text":"abc","numeric":5},{"text":"def","numeric":6}]'
+      '[{"text":"abc","numeric":5},{"text":"def","numeric":6}]'
     end
 
     let(:json_hash_with_arrays) do
       '{"array1":[{"key1":"value1"},{"key1":"value1"}],"array2":[1,2,3,4]}'
     end
 
-    context 'when no klass is specified' do
+    let(:json_array_plain) do
+      '["a","b","c"]'
+    end
 
+    context 'when not json' do
+      let(:not_json) { "\"not_json\"" }
+
+      it 'returns the given object' do
+        expect(subject.from_json(not_json)).to eq(not_json)
+      end
+    end
+
+    context 'when no klass is specified' do
       it 'should return a hash form the json' do
         expect(subject.from_json(json)).to eq({ text: 'abc', numeric: 5 })
       end
@@ -112,6 +131,14 @@ RSpec.describe JsonKit::Helper do
         expect(hash[:array2][3]).to eq(4)
       end
 
+      it 'returns plain arrays from the json' do
+        array = subject.from_json(json_array_plain)
+        expect(array).to be_a(Array)
+        expect(array.length).to eq(3)
+        expect(array[0]).to eq('a')
+        expect(array[1]).to eq('b')
+        expect(array[2]).to eq('c')
+      end
     end
 
     context 'when a klass is specified' do
@@ -134,7 +161,5 @@ RSpec.describe JsonKit::Helper do
         expect(array[1].numeric).to eq(6)
       end
     end
-
   end
-
 end
