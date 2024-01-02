@@ -6,7 +6,7 @@ module JsonKit
     end
 
     def to_json(obj)
-      if [String, Fixnum, Numeric, Date, DateTime, Time, Integer, TrueClass, FalseClass].include?(obj.class)
+      if [String, Numeric, Date, DateTime, Time, Integer, TrueClass, FalseClass].include?(obj.class)
         return obj
       elsif obj.is_a?(Hash)
         return JSON.dump(obj)
@@ -23,7 +23,7 @@ module JsonKit
 
       obj = JSON.parse(json)
 
-      if [String, Fixnum, Numeric, Date, DateTime, Time, Integer, TrueClass, FalseClass].include?(obj.class)
+      if [String, Numeric, Date, DateTime, Time, Integer, TrueClass, FalseClass].include?(obj.class)
         return json
       end
 
